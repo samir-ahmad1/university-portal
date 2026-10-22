@@ -34,6 +34,7 @@ export default function Login() {
     password === "admin123"
   ) {
     setIsLoading(true);
+    localStorage.setItem("isAuthenticated", "true");
 
     if (rememberMe) {
       localStorage.setItem("rememberMe", "true");
