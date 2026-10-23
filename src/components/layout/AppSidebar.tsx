@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -64,16 +64,49 @@ const navigationItems = [
 
 export default function AppSidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = (restoreFocus = true) => {
     setMobileMenuOpen(false);
+    if (restoreFocus) menuButtonRef.current?.focus();
   };
+
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+
+    const updateInert = () => {
+      sidebar.inert = !mobileMenuOpen && window.matchMedia("(max-width: 767px)").matches;
+    };
+
+    updateInert();
+    window.addEventListener("resize", updateInert);
+
+    if (mobileMenuOpen) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          setMobileMenuOpen(false);
+          menuButtonRef.current?.focus();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener("resize", updateInert);
+      };
+    }
+
+    return () => window.removeEventListener("resize", updateInert);
+  }, [mobileMenuOpen]);
 
   return (
     <>
       {/* Mobile Menu Button */}
       <button
         type="button"
+        ref={menuButtonRef}
         onClick={() => setMobileMenuOpen(true)}
         aria-label="Open navigation menu"
         aria-expanded={mobileMenuOpen}
@@ -83,19 +116,23 @@ export default function AppSidebar() {
       </button>
 
       {/* Mobile Overlay */}
-      {mobileMenuOpen && (
-        <button
-          type="button"
-          aria-label="Close navigation menu"
-          onClick={closeMobileMenu}
-          className="fixed inset-0 z-40 bg-slate-950/40 md:hidden"
-        />
-      )}
+      <button
+        type="button"
+        aria-label="Close navigation menu"
+        aria-hidden={!mobileMenuOpen}
+        tabIndex={mobileMenuOpen ? 0 : -1}
+        disabled={!mobileMenuOpen}
+        onClick={() => closeMobileMenu()}
+        className={`mobile-overlay fixed inset-0 z-40 bg-slate-950/40 md:hidden ${
+          mobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-slate-200 bg-white transition-transform duration-300 md:z-40 md:w-64 md:translate-x-0 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        ref={sidebarRef}
+        className={`mobile-sidebar fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-slate-200 bg-white md:z-40 md:w-64 md:translate-x-0 ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full pointer-events-none md:pointer-events-auto"
         }`}
       >
         {/* University Branding */}
@@ -117,7 +154,7 @@ export default function AppSidebar() {
           {/* Mobile Close Button */}
           <button
             type="button"
-            onClick={closeMobileMenu}
+            onClick={() => closeMobileMenu()}
             aria-label="Close navigation menu"
             className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-blue-950 md:hidden"
           >
@@ -143,7 +180,7 @@ export default function AppSidebar() {
                   key={item.path}
                   to={item.path}
                   end={item.path === "/"}
-                  onClick={closeMobileMenu}
+                  onClick={() => closeMobileMenu(false)}
                   className={({ isActive }) =>
                     `group relative flex min-h-11 items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors duration-200 ${
                       isActive

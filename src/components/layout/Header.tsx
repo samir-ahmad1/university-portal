@@ -1,4 +1,3 @@
-import { Bell, Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 const pageTitles: Record<string, string> = {
@@ -34,24 +33,7 @@ export default function Header() {
 
       {/* Header Actions */}
       <div className="flex items-center gap-3 sm:gap-5">
-        <button
-          type="button"
-          aria-label="Search"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-900"
-        >
-          <Search size={20} />
-        </button>
-
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-900"
-        >
-          <Bell size={20} />
-
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-600 ring-2 ring-white" />
-        </button>
-
+        
         <div className="hidden h-10 w-px bg-slate-200 sm:block" />
 
         {/* Administrator Profile */}
@@ -65,6 +47,7 @@ export default function Header() {
               University Admin
             </p>
           </div>
+
 
           <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-100 bg-blue-950 text-sm font-bold text-white">
             A

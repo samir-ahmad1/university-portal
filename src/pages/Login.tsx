@@ -1,15 +1,12 @@
 import LoadingScreen from "@/components/layout/LoadingScreen";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  BookOpen,
   Eye,
   EyeOff,
-  GraduationCap,
   LockKeyhole,
   Mail,
-  Users,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -18,12 +15,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Login() {
   const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigationTimeout = useRef<number | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (navigationTimeout.current !== null) {
+        window.clearTimeout(navigationTimeout.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault();
@@ -40,9 +46,9 @@ export default function Login() {
       localStorage.setItem("rememberMe", "true");
     }
 
-    setTimeout(() => {
+    navigationTimeout.current = window.setTimeout(() => {
       navigate("/");
-    }, 1500);
+    }, 2500);
   } else {
     setError("Invalid email or password. Please try again.");
   }
@@ -52,11 +58,11 @@ if (isLoading) {
 }
 
   return (
-    <main className="h-dvh overflow-hidden bg-slate-100 p-0 sm:p-3 lg:p-4">
-      <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 overflow-hidden bg-white sm:rounded-2xl sm:shadow-xl lg:grid-cols-2">
+    <main className="login-enter flex min-h-dvh items-center justify-center overflow-y-auto bg-slate-100 p-4 sm:p-6">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-xl">
         {/* LEFT: LOGIN FORM */}
-        <section className="flex h-full min-h-0 items-center justify-center overflow-hidden px-6 py-4 sm:px-10 lg:px-8 xl:px-14">
-          <div className="w-full max-w-[390px]">
+        <section className="flex items-center justify-center px-6 py-8 sm:px-10 sm:py-10">
+          <div className="w-full">
             {/* UNIVERSITY BRAND */}
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
@@ -230,136 +236,7 @@ if (isLoading) {
         </section>
 
         {/* RIGHT: UNIVERSITY BRANDING */}
-        <section className="relative hidden h-full min-h-0 overflow-hidden bg-[#111827] p-5 lg:flex lg:items-center lg:justify-center xl:p-8">
-          {/* BACKGROUND GRID */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px]"
-          />
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-red-600/15 blur-3xl"
-          />
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-blue-600/15 blur-3xl"
-          />
-
-          {/* CONTENT */}
-          <div className="relative z-10 w-full max-w-[520px] rounded-3xl border border-white/10 bg-white/[0.04] p-6 xl:p-8">
-            {/* PANEL HEADER */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white">
-                <img
-                  src="/logo.gif"
-                  alt="Rana University logo"
-                  className="h-9 w-9 object-contain"
-                />
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-white">
-                  Rana University
-                </h3>
-                <p className="mt-1 text-xs text-slate-400">
-                  Academic Management Portal
-                </p>
-              </div>
-            </div>
-
-            {/* MAIN MESSAGE */}
-            <div className="mb-7 mt-8">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-3 py-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
-                <span className="text-xs font-medium text-red-300">
-                  Official University Portal
-                </span>
-              </div>
-
-              <h2 className="text-3xl font-bold leading-tight tracking-tight text-white xl:text-4xl">
-                Rana University
-                <span className="mt-1 block text-red-400">
-                  Management Portal
-                </span>
-              </h2>
-
-              <p className="mt-4 max-w-md text-sm leading-6 text-slate-400">
-                Manage academic information, student records, faculty,
-                and courses through one centralized platform.
-              </p>
-            </div>
-
-            {/* FEATURES */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10">
-                  <GraduationCap className="h-5 w-5 text-red-400" />
-                </div>
-
-                <h3 className="text-sm font-semibold text-white">
-                  Students
-                </h3>
-
-                <p className="mt-1.5 text-xs leading-5 text-slate-400">
-                  Student records and academic information.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                  <Users className="h-5 w-5 text-blue-400" />
-                </div>
-
-                <h3 className="text-sm font-semibold text-white">
-                  Faculty
-                </h3>
-
-                <p className="mt-1.5 text-xs leading-5 text-slate-400">
-                  Faculty information and administration.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-                  <BookOpen className="h-5 w-5 text-emerald-400" />
-                </div>
-
-                <h3 className="text-sm font-semibold text-white">
-                  Courses
-                </h3>
-
-                <p className="mt-1.5 text-xs leading-5 text-slate-400">
-                  Courses and academic resources.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
-                  <LockKeyhole className="h-5 w-5 text-amber-400" />
-                </div>
-
-                <h3 className="text-sm font-semibold text-white">
-                  Administration
-                </h3>
-
-                <p className="mt-1.5 text-xs leading-5 text-slate-400">
-                  Centralized university management.
-                </p>
-              </div>
-            </div>
-
-            {/* BOTTOM DIVIDER */}
-            <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-5">
-              <p className="text-xs text-slate-500">
-                Rana University · Academic Services
-              </p>
-
-              <GraduationCap className="h-5 w-5 shrink-0 text-red-400" />
-            </div>
-          </div>
-        </section>
+        
       </div>
     </main>
   );

@@ -1,18 +1,34 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useLayoutEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import PageContainer from "./components/layout/PageContainer";
+import RecordDirectory from "./components/dashboard/RecordDirectory";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Students from "./pages/Students";
+import Teachers from "./pages/Teachers";
 
 import "./App.css";
 import DashboardLayout from "./components/layout/DashoboardLayout";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public Route */}
         <Route path="/login" element={<Login />} />
@@ -29,48 +45,16 @@ export function App() {
             />
 
             {/* Students */}
-            <Route
-              path="students"
-              element={
-                <PageContainer
-                  title="Students"
-                  description="Manage student records and academic information."
-                />
-              }
-            />
+            <Route path="students" element={<Students />} />
 
             {/* Teachers */}
-            <Route
-              path="teachers"
-              element={
-                <PageContainer
-                  title="Teachers"
-                  description="Manage faculty records and teaching assignments."
-                />
-              }
-            />
+            <Route path="teachers" element={<Teachers />} />
 
             {/* Departments */}
-            <Route
-              path="departments"
-              element={
-                <PageContainer
-                  title="Departments"
-                  description="Organize academic departments and their information."
-                />
-              }
-            />
+            <Route path="departments" element={<RecordDirectory kind="departments" title="Departments" description="Organize academic departments and their information." />} />
 
             {/* Courses */}
-            <Route
-              path="courses"
-              element={
-                <PageContainer
-                  title="Courses"
-                  description="Manage courses, subjects, and academic offerings."
-                />
-              }
-            />
+            <Route path="courses" element={<RecordDirectory kind="courses" title="Courses" description="Manage courses, subjects, and academic offerings." />} />
 
             {/* Classes & Sections */}
             <Route
