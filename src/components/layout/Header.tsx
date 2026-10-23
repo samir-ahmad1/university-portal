@@ -1,4 +1,6 @@
 import { useLocation } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const pageTitles: Record<string, string> = {
   "/": "Dashboard",
@@ -15,6 +17,7 @@ const pageTitles: Record<string, string> = {
 
 export default function Header() {
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const pageTitle = pageTitles[location.pathname] ?? "Dashboard";
 
@@ -33,7 +36,16 @@ export default function Header() {
 
       {/* Header Actions */}
       <div className="flex items-center gap-3 sm:gap-5">
-        
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          aria-pressed={theme === "dark"}
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
+        >
+          {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
         <div className="hidden h-10 w-px bg-slate-200 sm:block" />
 
         {/* Administrator Profile */}

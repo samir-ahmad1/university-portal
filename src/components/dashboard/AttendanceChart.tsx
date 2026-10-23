@@ -11,7 +11,7 @@ interface AttendanceDatum {
   value: number;
 }
 
-const COLORS = ["#1e40af", "#dc2626", "#f59e0b"];
+const COLORS = ["var(--chart-accent)", "var(--chart-highlight)", "#f59e0b"];
 
 export default function AttendanceChart({ data }: { data: AttendanceDatum[] }) {
   const attendanceRate =
@@ -57,7 +57,9 @@ export default function AttendanceChart({ data }: { data: AttendanceDatum[] }) {
               formatter={(value) => [`${value}%`, "Attendance"]}
               contentStyle={{
                 borderRadius: "10px",
-                border: "1px solid #e2e8f0",
+                border: "1px solid var(--border)",
+                backgroundColor: "var(--popover)",
+                color: "var(--popover-foreground)",
                 boxShadow: "0 4px 12px rgba(15, 23, 42, 0.08)",
               }}
             />

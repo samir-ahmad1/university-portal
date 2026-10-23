@@ -1,6 +1,6 @@
 export default function LoadingScreen() {
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-slate-950 px-4">
+    <main className="loading-screen relative flex min-h-dvh items-center justify-center overflow-hidden bg-slate-950 px-4">
 
       {/* 3D Background Glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600/10 blur-[100px]" />

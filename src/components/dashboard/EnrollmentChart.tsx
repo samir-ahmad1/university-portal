@@ -59,20 +59,20 @@ export default function EnrollmentChart({ data, academicYear }: EnrollmentChartP
               >
                 <stop
                   offset="0%"
-                  stopColor="#1e40af"
+                  stopColor="var(--chart-accent)"
                   stopOpacity={0.2}
                 />
 
                 <stop
                   offset="95%"
-                  stopColor="#1e40af"
+                  stopColor="var(--chart-accent)"
                   stopOpacity={0.01}
                 />
               </linearGradient>
             </defs>
 
             <CartesianGrid
-              stroke="#e2e8f0"
+              stroke="var(--chart-grid)"
               strokeDasharray="4 4"
               vertical={false}
             />
@@ -81,7 +81,7 @@ export default function EnrollmentChart({ data, academicYear }: EnrollmentChartP
               dataKey="semester"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#64748b", fontSize: 11 }}
+              tick={{ fill: "var(--chart-label)", fontSize: 11 }}
               tickMargin={12}
               interval="preserveStartEnd"
               minTickGap={20}
@@ -90,7 +90,7 @@ export default function EnrollmentChart({ data, academicYear }: EnrollmentChartP
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#64748b", fontSize: 12 }}
+              tick={{ fill: "var(--chart-label)", fontSize: 12 }}
               tickMargin={8}
               domain={[0, "dataMax + 200"]}
             />
@@ -98,7 +98,9 @@ export default function EnrollmentChart({ data, academicYear }: EnrollmentChartP
             <Tooltip
               contentStyle={{
                 borderRadius: "10px",
-                border: "1px solid #e2e8f0",
+                border: "1px solid var(--border)",
+                backgroundColor: "var(--popover)",
+                color: "var(--popover-foreground)",
                 boxShadow: "0 4px 12px rgba(15, 23, 42, 0.08)",
               }}
               formatter={(value) => [
@@ -110,19 +112,19 @@ export default function EnrollmentChart({ data, academicYear }: EnrollmentChartP
             <Area
               type="monotone"
               dataKey="students"
-              stroke="#1e40af"
+              stroke="var(--chart-accent)"
               strokeWidth={3}
               fill="url(#enrollmentGradient)"
               activeDot={{
                 r: 6,
-                fill: "#dc2626",
-                stroke: "#ffffff",
+                fill: "var(--chart-highlight)",
+                stroke: "var(--card)",
                 strokeWidth: 2,
               }}
               dot={{
                 r: 3,
-                fill: "#1e40af",
-                stroke: "#ffffff",
+                fill: "var(--chart-accent)",
+                stroke: "var(--card)",
                 strokeWidth: 1.5,
               }}
             />
